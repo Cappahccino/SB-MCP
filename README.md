@@ -59,10 +59,36 @@ npm start
 
 ## Usage with Claude
 
+### Configuration in Claude Desktop
+
 1. Start the MCP server
 2. In Claude Desktop, go to Settings > MCP
 3. Add a new MCP server with the URL `http://localhost:3000` (or your chosen host/port)
 4. You should see a green active status once connected
+
+### For Claude Desktop (mcp-config.json)
+
+You can also create a `mcp-config.json` file for Claude Desktop with the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "node",
+      "args": ["/absolute/path/to/SB-MCP/dist/index.js"],
+      "env": {
+        "SUPABASE_URL": "your_supabase_project_url",
+        "SUPABASE_ANON_KEY": "your_supabase_anon_key",
+        "SUPABASE_SERVICE_ROLE_KEY": "your_supabase_service_role_key",
+        "MCP_SERVER_PORT": "3000",
+        "MCP_SERVER_HOST": "localhost",
+        "MCP_API_KEY": "your_mcp_api_key"
+      }
+    }
+  }
+}
+```
+
 5. You can now use Claude to perform database operations and invoke Edge Functions
 
 Example prompts:
