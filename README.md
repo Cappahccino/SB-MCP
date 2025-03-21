@@ -61,6 +61,45 @@ MCP_SERVER_HOST=localhost
 MCP_API_KEY=your_secret_api_key
 ```
 
+## Usage with Claude
+
+Claude requires a specific transport mode for compatibility. This package provides a dedicated binary for Claude integration:
+
+### In Claude Desktop MCP Config
+
+```json
+"supabase": {
+  "command": "npx",
+  "args": [
+    "-y",
+    "supabase-mcp@latest",
+    "supabase-mcp-claude"
+  ],
+  "env": {
+    "SUPABASE_URL": "your_supabase_project_url",
+    "SUPABASE_ANON_KEY": "your_supabase_anon_key", 
+    "SUPABASE_SERVICE_ROLE_KEY": "your_service_role_key",
+    "MCP_API_KEY": "your_secret_api_key"
+  }
+}
+```
+
+Make sure you set the required environment variables in the configuration. Claude will use the stdio transport for communication.
+
+### Manual Testing with Claude Binary
+
+For testing outside of Claude, you can run:
+
+```bash
+npm run start:claude
+```
+
+Or if installed globally:
+
+```bash
+supabase-mcp-claude
+```
+
 ## Usage as a Standalone Server
 
 After installing globally:
@@ -70,51 +109,6 @@ supabase-mcp
 ```
 
 This will start the MCP server at http://localhost:3000 (or the port specified in your .env file).
-
-## Usage with Claude Desktop
-
-To use with Claude Desktop, you have two options:
-
-### Option 1: Using the Configuration UI
-
-1. Open Claude Desktop
-2. Go to Settings > Model Context Protocol
-3. Click "Add MCP Server"
-4. For the configuration, set:
-   - **Name**: Supabase
-   - **Transport Type**: Stdio
-   - **Command**: supabase-mcp-claude
-   - **Environment Variables**: Add the required Supabase environment variables
-5. Click "Add"
-
-### Option 2: Using mcp-config.json
-
-Create a `mcp-config.json` file with the following content:
-
-```json
-{
-  "mcpServers": {
-    "supabase": {
-      "command": "supabase-mcp-claude",
-      "env": {
-        "SUPABASE_URL": "your_supabase_project_url",
-        "SUPABASE_ANON_KEY": "your_supabase_anon_key",
-        "SUPABASE_SERVICE_ROLE_KEY": "your_supabase_service_role_key",
-        "MCP_API_KEY": "your_secret_api_key"
-      }
-    }
-  }
-}
-```
-
-Then:
-
-1. Open Claude Desktop
-2. Go to Settings > Model Context Protocol
-3. Click on "Advanced Configuration"
-4. Click on "Select Configuration File"
-5. Browse to and select your `mcp-config.json` file
-6. Click "Save" or "Apply"
 
 ## Usage in Your Code
 
@@ -137,27 +131,28 @@ app.listen(mcpConfig.port, mcpConfig.host, () => {
 
 ## Troubleshooting
 
-### Port Already in Use
+### Common Issues and Solutions
 
-If you see "Port XXXX is already in use", the server will automatically try to find an available port. You can manually specify a different port in your `.env` file by changing the `MCP_SERVER_PORT` value.
+#### 1. "Port XXXX is already in use"
+The HTTP server attempts to find an available port automatically. You can manually specify a different port in your `.env` file by changing the `MCP_SERVER_PORT` value.
 
-### Missing Required Environment Variables
+#### 2. "Missing required environment variables"
+Make sure you have a proper `.env` file with all the required values or that you've set the environment variables in your system.
 
-If you see "Missing required environment variables", make sure you have a proper `.env` file with all the required values or that you've set the environment variables in your system.
-
-### JSON Parsing Errors in Claude
-
-If Claude is showing "Unexpected token" errors, make sure you're using the correct Claude-specific command:
-
+#### 3. "TypeError: Class constructor Server cannot be invoked without 'new'"
+If you see this error, you may be running an older version of the package. Update to the latest version:
 ```bash
-supabase-mcp-claude  # For Claude Desktop specifically
+npm install -g supabase-mcp@latest
 ```
 
-Instead of:
+#### 4. JSON parsing errors with Claude
+Make sure you're using the Claude-specific binary (`supabase-mcp-claude`) instead of the regular HTTP server (`supabase-mcp`).
 
-```bash
-supabase-mcp  # The regular HTTP server
-```
+#### 5. Request timed out with Claude
+This usually means Claude initiated the connection but the server was unable to respond in time. Check:
+- Are your Supabase credentials correct?
+- Is your server setup properly and running?
+- Is there anything blocking the connection?
 
 ## Tools Reference
 
@@ -203,6 +198,8 @@ supabase-mcp  # The regular HTTP server
 - 1.0.3: Added JSON-RPC support
 - 1.1.0: Complete rewrite using official MCP SDK
 - 1.2.0: Added separate Claude transport and fixed port conflict issues
+- 1.3.0: Updated for improved compatibility with TypeScript projects
+- 1.4.0: Fixed Claude stdio transport integration based on Supabase community best practices
 
 ## License
 
