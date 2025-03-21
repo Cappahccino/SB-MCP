@@ -17,6 +17,7 @@ A Model Context Protocol (MCP) server that allows Claude and other LLMs to inter
 
 - Server features:
   - Automatic port selection (will find an available port if the default is in use)
+  - Full MCP protocol compatibility
 
 ## Installation
 
@@ -73,7 +74,7 @@ npm start
 
 ## Auto Port Selection
 
-The server now includes automatic port selection! If the configured port (default 3000) is already in use, the server will automatically find the next available port. This eliminates the "EADDRINUSE: address already in use" error that happens when multiple instances of the server try to use the same port.
+The server includes automatic port selection! If the configured port (default 3000) is already in use, the server will automatically find the next available port. This eliminates the "EADDRINUSE: address already in use" error that happens when multiple instances of the server try to use the same port.
 
 For example, if port 3000 is already in use, the server will try ports 3001, 3002, etc., until it finds an available one.
 
@@ -144,6 +145,12 @@ Once connected, you can use natural language to interact with your Supabase data
 - "Delete all expired sessions from the 'sessions' table"
 - "Invoke the 'process-payment' Edge Function with the order ID and amount"
 
+## Troubleshooting
+
+### JSON Parsing Errors
+
+If you see errors like `Unexpected token 'S', "Supabase M"...` in your logs, make sure you're using version 1.0.2 or later of the package which fixes MCP protocol compatibility issues.
+
 ## API Documentation
 
 ### MCP Manifest
@@ -184,6 +191,7 @@ If you want to publish updates:
 
 - 1.0.0: Initial release
 - 1.0.1: Added automatic port selection to fix EADDRINUSE errors
+- 1.0.2: Fixed MCP protocol compatibility issues by directing logs to stderr
 
 ## License
 
