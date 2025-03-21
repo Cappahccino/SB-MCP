@@ -17,11 +17,14 @@
     }
   },
   "bin": {
-    "supabase-mcp": "dist/esm/index.js"
+    "supabase-mcp": "dist/esm/index.js",
+    "supabase-mcp-claude": "dist/esm/claude-transport.js"
   },
   "scripts": {
     "start": "node dist/esm/index.js",
+    "start:claude": "node dist/esm/claude-transport.js",
     "dev": "tsx watch --clear-screen=false src/index.ts",
+    "dev:claude": "tsx watch --clear-screen=false src/claude-transport.ts",
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.prod.json && echo '{\"type\": \"module\"}' > dist/esm/package.json",
     "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
