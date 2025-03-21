@@ -17,7 +17,7 @@ A Model Context Protocol (MCP) server that allows Claude and other LLMs to inter
 
 - Server features:
   - Automatic port selection (will find an available port if the default is in use)
-  - Full MCP protocol compatibility
+  - Full MCP protocol compatibility with JSON-RPC support
 
 ## Installation
 
@@ -151,28 +151,30 @@ Once connected, you can use natural language to interact with your Supabase data
 
 If you see errors like `Unexpected token 'S', "Supabase M"...` in your logs, make sure you're using version 1.0.2 or later of the package which fixes MCP protocol compatibility issues.
 
+### Request Timeout Errors
+
+If you see errors like `"Error: MCP error -32001: Request timed out"`, make sure you're using version 1.0.3 or later which implements the proper JSON-RPC protocol that Claude expects.
+
 ## API Documentation
 
-### MCP Manifest
+### MCP Protocol Endpoints
 
-- `GET /.well-known/mcp-manifest` - Returns the MCP manifest describing available capabilities
+- `GET /.well-known/mcp-manifest` - Returns the MCP manifest describing capabilities
+- `POST /mcp` - JSON-RPC endpoint for MCP protocol communication
 
-### Database Operations
+### REST API Endpoints
 
 - `POST /database/queryDatabase` - Query data from a table
 - `POST /database/insertData` - Insert data into a table
 - `POST /database/updateData` - Update data in a table
 - `POST /database/deleteData` - Delete data from a table
 - `GET /database/tables` - List all tables
-
-### Edge Functions
-
 - `POST /edge-functions/:functionName` - Invoke an Edge Function
 - `GET /edge-functions` - Get information about listing Edge Functions
 
 ## Security
 
-- All endpoints (except the manifest) require an API key to be provided in the `x-api-key` header
+- All endpoints (except the manifest and MCP JSON-RPC) require an API key to be provided in the `x-api-key` header
 - The API key should match the `MCP_API_KEY` in your environment variables
 - The server uses the Supabase service role key for database operations, so be cautious about what operations are allowed
 
@@ -192,6 +194,7 @@ If you want to publish updates:
 - 1.0.0: Initial release
 - 1.0.1: Added automatic port selection to fix EADDRINUSE errors
 - 1.0.2: Fixed MCP protocol compatibility issues by directing logs to stderr
+- 1.0.3: Implemented proper JSON-RPC support for full MCP protocol compliance
 
 ## License
 
