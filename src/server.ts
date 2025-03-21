@@ -10,7 +10,7 @@ import {
   handleEdgeFunction,
   handleListEdgeFunctions,
   handleJsonRpc
-} from './handlers';
+} from './handlers/index.js';
 
 export function createServer() {
   const app = express();
