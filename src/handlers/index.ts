@@ -1,9 +1,9 @@
-export * from './database';
-export * from './edge-functions';
-export * from './mcp-rpc';
+export * from './database.js';
+export * from './edge-functions.js';
+export * from './mcp-rpc.js';
 
 import { Request, Response } from 'express';
-import { mcpManifest, mcpConfig } from '../config';
+import { mcpManifest, mcpConfig } from '../config.js';
 
 /**
  * Handle MCP manifest request
