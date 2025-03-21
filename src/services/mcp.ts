@@ -1,5 +1,5 @@
-import { supabaseService } from './supabase';
-import { MCPToolCallRequest, MCPToolCallResponse, DatabaseParams, EdgeFunctionParams } from '../types/mcp';
+import { supabaseService } from './supabase.js';
+import { MCPToolCallRequest, MCPToolCallResponse, DatabaseParams, EdgeFunctionParams } from '../types/mcp.js';
 
 class MCPService {
   /**
