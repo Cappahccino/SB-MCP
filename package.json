@@ -1,7 +1,7 @@
 {
   "name": "supabase-mcp",
-  "version": "1.4.0",
-  "description": "MCP server for Supabase CRUD operations and Edge Functions integration",
+  "version": "1.5.0",
+  "description": "MCP server for Supabase CRUD operations",
   "type": "module",
   "exports": {
     "./*": {
