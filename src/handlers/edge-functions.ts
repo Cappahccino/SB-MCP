@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { mcpService } from '../services/mcp';
-import { MCPToolCallRequest } from '../types/mcp';
-import { mcpConfig } from '../config';
+import { mcpService } from '../services/mcp.js';
+import { MCPToolCallRequest } from '../types/mcp.js';
+import { mcpConfig } from '../config.js';
 
 /**
  * Handle MCP tool call requests for Edge Functions
