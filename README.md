@@ -30,6 +30,12 @@ The package is published on npm! You can install it globally with:
 npm install -g supabase-mcp
 ```
 
+Or locally in your project:
+
+```bash
+npm install supabase-mcp
+```
+
 ### Option 2: Clone the repository
 
 ```bash
@@ -48,55 +54,59 @@ Create a `.env` file with your Supabase credentials:
 SUPABASE_URL=your_supabase_project_url
 SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+# MCP server configuration
+MCP_SERVER_PORT=3000
+MCP_SERVER_HOST=localhost
+MCP_API_KEY=your_secret_api_key
 ```
 
-## Usage with Claude Desktop
+## Usage as a Standalone Server
 
-### Option 1: Using the Configuration UI
+After installing globally:
 
-1. Open Claude Desktop
-2. Go to Settings > MCP
-3. Click "Add MCP Server"
-4. For the configuration, set:
-   - **Name**: Supabase
-   - **Transport Type**: Stdio
-   - **Command**: npx
-   - **Arguments**: `-y supabase-mcp`
-   - **Environment Variables**: Add the required Supabase environment variables
-5. Click "Add"
-
-### Option 2: Using mcp-config.json
-
-Create a `mcp-config.json` file with the following content:
-
-```json
-{
-  "mcpServers": {
-    "supabase": {
-      "command": "npx",
-      "args": ["-y", "supabase-mcp"],
-      "env": {
-        "SUPABASE_URL": "your_supabase_project_url",
-        "SUPABASE_ANON_KEY": "your_supabase_anon_key",
-        "SUPABASE_SERVICE_ROLE_KEY": "your_supabase_service_role_key"
-      }
-    }
-  }
-}
+```bash
+supabase-mcp
 ```
 
-Then:
+This will start the MCP server at http://localhost:3000 (or the port specified in your .env file).
 
-1. Open Claude Desktop
-2. Go to Settings > MCP
-3. Click on "Advanced Configuration"
-4. Click on "Select Configuration File"
-5. Browse to and select your `mcp-config.json` file
-6. Click "Save" or "Apply"
+## Usage in Your Code
 
-You should see a green "active" status once connected.
+You can also use supabase-mcp as a library in your own Node.js projects:
 
-## Example Prompts
+```javascript
+import { createServer, mcpConfig, validateConfig } from 'supabase-mcp';
+
+// Validate configuration
+validateConfig();
+
+// Create the server
+const app = createServer();
+
+// Start the server
+app.listen(mcpConfig.port, mcpConfig.host, () => {
+  console.log(`Supabase MCP server running at http://${mcpConfig.host}:${mcpConfig.port}`);
+});
+```
+
+## Usage with Claude
+
+### REST API Endpoints
+
+The server exposes several REST API endpoints that Claude can interact with:
+
+- `GET /.well-known/mcp-manifest` - Returns the MCP manifest
+- `POST /mcp` - MCP JSON-RPC endpoint
+- `GET /health` - Health check
+- `POST /database/:operation` - CRUD operations
+- `GET /database/tables` - List tables
+- `POST /edge-functions/:functionName` - Invoke Edge Functions
+- `GET /edge-functions` - List Edge Functions
+
+Make sure to include the `x-api-key` header with your API key for all endpoints except the manifest.
+
+### Example Prompts for Claude
 
 Once connected, you can use natural language to interact with your Supabase database:
 
@@ -144,29 +154,23 @@ Once connected, you can use natural language to interact with your Supabase data
 
 ## Troubleshooting
 
-If you encounter connection issues, ensure:
+If you encounter issues:
 
-1. Your Supabase credentials are correct
-2. The MCP server is properly configured in Claude Desktop
-3. You're using the latest version of the package
-4. There are no other MCP servers running on the same port
+1. Ensure your Supabase credentials are correct
+2. Check if the server is running with `curl http://localhost:3000/health`
+3. Verify your API key is correctly set and included in requests
+4. Check for error messages in the console where the server is running
+5. Ensure you're using the latest version of the package
 
-## Publishing to npm (for maintainers)
+## Development
 
-The package is published to npm as `supabase-mcp`.
+To contribute to this project:
 
-If you want to publish updates:
-
-1. Update the version in package.json
-2. Build the project: `npm run build`
-3. Log in to npm: `npm login`
-4. Publish: `npm publish`
-
-## Architecture
-
-This MCP server is built using the [Model Context Protocol TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk), which provides a standardized interface for connecting AI assistants like Claude to external tools and data.
-
-The server uses a stdio transport to communicate with Claude Desktop, meaning it receives requests on stdin and sends responses on stdout, following the MCP JSON-RPC protocol.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Make changes
+4. Build: `npm run build`
+5. Test: `npm test`
 
 ## Version History
 
@@ -175,6 +179,7 @@ The server uses a stdio transport to communicate with Claude Desktop, meaning it
 - 1.0.2: Fixed protocol compatibility issues
 - 1.0.3: Added JSON-RPC support
 - 1.1.0: Complete rewrite using official MCP SDK
+- 1.2.0: Module format update for improved compatibility
 
 ## License
 
