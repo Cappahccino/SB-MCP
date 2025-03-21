@@ -68,7 +68,8 @@ class SupabaseService {
       });
 
       const { data, error } = await queryBuilder;
-      return { data, error };
+      // Fix the type casting here
+      return { data: data as T[], error };
     } catch (error) {
       return { data: null, error };
     }
