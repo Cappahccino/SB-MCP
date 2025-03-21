@@ -71,6 +71,51 @@ supabase-mcp
 
 This will start the MCP server at http://localhost:3000 (or the port specified in your .env file).
 
+## Usage with Claude Desktop
+
+To use with Claude Desktop, you have two options:
+
+### Option 1: Using the Configuration UI
+
+1. Open Claude Desktop
+2. Go to Settings > Model Context Protocol
+3. Click "Add MCP Server"
+4. For the configuration, set:
+   - **Name**: Supabase
+   - **Transport Type**: Stdio
+   - **Command**: supabase-mcp-claude
+   - **Environment Variables**: Add the required Supabase environment variables
+5. Click "Add"
+
+### Option 2: Using mcp-config.json
+
+Create a `mcp-config.json` file with the following content:
+
+```json
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "supabase-mcp-claude",
+      "env": {
+        "SUPABASE_URL": "your_supabase_project_url",
+        "SUPABASE_ANON_KEY": "your_supabase_anon_key",
+        "SUPABASE_SERVICE_ROLE_KEY": "your_supabase_service_role_key",
+        "MCP_API_KEY": "your_secret_api_key"
+      }
+    }
+  }
+}
+```
+
+Then:
+
+1. Open Claude Desktop
+2. Go to Settings > Model Context Protocol
+3. Click on "Advanced Configuration"
+4. Click on "Select Configuration File"
+5. Browse to and select your `mcp-config.json` file
+6. Click "Save" or "Apply"
+
 ## Usage in Your Code
 
 You can also use supabase-mcp as a library in your own Node.js projects:
@@ -90,31 +135,29 @@ app.listen(mcpConfig.port, mcpConfig.host, () => {
 });
 ```
 
-## Usage with Claude
+## Troubleshooting
 
-### REST API Endpoints
+### Port Already in Use
 
-The server exposes several REST API endpoints that Claude can interact with:
+If you see "Port XXXX is already in use", the server will automatically try to find an available port. You can manually specify a different port in your `.env` file by changing the `MCP_SERVER_PORT` value.
 
-- `GET /.well-known/mcp-manifest` - Returns the MCP manifest
-- `POST /mcp` - MCP JSON-RPC endpoint
-- `GET /health` - Health check
-- `POST /database/:operation` - CRUD operations
-- `GET /database/tables` - List tables
-- `POST /edge-functions/:functionName` - Invoke Edge Functions
-- `GET /edge-functions` - List Edge Functions
+### Missing Required Environment Variables
 
-Make sure to include the `x-api-key` header with your API key for all endpoints except the manifest.
+If you see "Missing required environment variables", make sure you have a proper `.env` file with all the required values or that you've set the environment variables in your system.
 
-### Example Prompts for Claude
+### JSON Parsing Errors in Claude
 
-Once connected, you can use natural language to interact with your Supabase database:
+If Claude is showing "Unexpected token" errors, make sure you're using the correct Claude-specific command:
 
-- "Query all users from the 'profiles' table where the status is 'active'"
-- "Insert a new product with name 'Widget', price 19.99, and category 'Tools' into the products table"
-- "Update the 'users' table to set status to 'inactive' where last_login was before 2023-01-01"
-- "Delete all expired sessions from the 'sessions' table"
-- "Invoke the 'process-payment' Edge Function with the order ID and amount"
+```bash
+supabase-mcp-claude  # For Claude Desktop specifically
+```
+
+Instead of:
+
+```bash
+supabase-mcp  # The regular HTTP server
+```
 
 ## Tools Reference
 
@@ -152,26 +195,6 @@ Once connected, you can use natural language to interact with your Supabase data
      - `functionName` (string): Name of the Edge Function to invoke
      - `payload` (object, optional): Optional payload to send to the function
 
-## Troubleshooting
-
-If you encounter issues:
-
-1. Ensure your Supabase credentials are correct
-2. Check if the server is running with `curl http://localhost:3000/health`
-3. Verify your API key is correctly set and included in requests
-4. Check for error messages in the console where the server is running
-5. Ensure you're using the latest version of the package
-
-## Development
-
-To contribute to this project:
-
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Make changes
-4. Build: `npm run build`
-5. Test: `npm test`
-
 ## Version History
 
 - 1.0.0: Initial release
@@ -179,7 +202,7 @@ To contribute to this project:
 - 1.0.2: Fixed protocol compatibility issues
 - 1.0.3: Added JSON-RPC support
 - 1.1.0: Complete rewrite using official MCP SDK
-- 1.2.0: Module format update for improved compatibility
+- 1.2.0: Added separate Claude transport and fixed port conflict issues
 
 ## License
 
