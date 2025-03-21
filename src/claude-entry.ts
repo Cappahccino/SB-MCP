@@ -17,8 +17,8 @@ try {
 // Create the MCP server
 const server = new McpServer({
   name: "Supabase MCP",
-  version: "1.3.1",
-  description: "MCP server for Supabase CRUD operations and Edge Functions"
+  version: "1.5.0",
+  description: "MCP server for Supabase database CRUD operations"
 });
 
 // ==== Database Tools ====
@@ -165,37 +165,6 @@ server.tool(
       content: [{ 
         type: "text", 
         text: JSON.stringify(result.tables, null, 2) 
-      }]
-    };
-  }
-);
-
-// ==== Edge Functions ====
-
-// Invoke Edge Function Tool
-server.tool(
-  "invokeEdgeFunction",
-  {
-    functionName: z.string().describe("Name of the Edge Function to invoke"),
-    payload: z.record(z.any()).optional().describe("Optional payload to send to the function")
-  },
-  async ({ functionName, payload = {} }) => {
-    const result = await supabaseService.invokeEdgeFunction(functionName, payload);
-    
-    if (result.error) {
-      return {
-        content: [{ 
-          type: "text", 
-          text: `Error invoking Edge Function ${functionName}: ${JSON.stringify(result.error)}` 
-        }],
-        isError: true
-      };
-    }
-    
-    return {
-      content: [{ 
-        type: "text", 
-        text: JSON.stringify(result.data, null, 2) 
       }]
     };
   }
