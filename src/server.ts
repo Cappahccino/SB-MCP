@@ -8,7 +8,8 @@ import {
   handleDatabaseOperation,
   handleListTables,
   handleEdgeFunction,
-  handleListEdgeFunctions
+  handleListEdgeFunctions,
+  handleJsonRpc
 } from './handlers';
 
 export function createServer() {
@@ -20,7 +21,7 @@ export function createServer() {
   
   // Skip API key validation for manifest endpoint
   app.use((req, res, next) => {
-    if (req.path === '/.well-known/mcp-manifest') {
+    if (req.path === '/.well-known/mcp-manifest' || req.path === '/mcp') {
       return next();
     }
     validateApiKey(req, res, next);
@@ -28,6 +29,9 @@ export function createServer() {
 
   // MCP required endpoints
   app.get('/.well-known/mcp-manifest', handleManifest);
+  
+  // MCP JSON-RPC endpoint
+  app.post('/mcp', handleJsonRpc);
   
   // Health check
   app.get('/health', handleHealthCheck);
