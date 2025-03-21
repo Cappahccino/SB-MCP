@@ -15,26 +15,27 @@ A Model Context Protocol (MCP) server that allows Claude and other LLMs to inter
   - Invoke Edge Functions
   - Pass payloads to functions
 
-## Prerequisites
-
-- Node.js (v16 or newer)
-- npm or yarn
-- Supabase project with API keys
-
 ## Installation
 
-1. Clone this repository:
+### Option 1: Install from npm (recommended)
+
+```bash
+npm install -g supabase-mcp
+```
+
+### Option 2: Clone the repository
+
 ```bash
 git clone https://github.com/Cappahccino/SB-MCP.git
 cd SB-MCP
-```
-
-2. Install dependencies:
-```bash
 npm install
+npm run build
 ```
 
-3. Create a `.env` file with your Supabase credentials and MCP configuration:
+## Configuration
+
+Create a `.env` file with your Supabase credentials and MCP configuration:
+
 ```
 # Supabase credentials
 SUPABASE_URL=your_supabase_project_url
@@ -47,28 +48,46 @@ MCP_SERVER_HOST=localhost
 MCP_API_KEY=your_mcp_api_key
 ```
 
-4. Build the project:
+## Usage
+
+### Running as a standalone server
+
+If you installed globally:
+
 ```bash
-npm run build
+supabase-mcp
 ```
 
-5. Start the server:
+If you cloned the repository:
+
 ```bash
 npm start
 ```
 
-## Usage with Claude
+## Usage with Claude Desktop
 
-### Configuration in Claude Desktop
+### Option 1: Simple Configuration (with npm package)
 
-1. Start the MCP server
-2. In Claude Desktop, go to Settings > MCP
-3. Add a new MCP server with the URL `http://localhost:3000` (or your chosen host/port)
-4. You should see a green active status once connected
+Create a `mcp-config.json` file with the following content:
 
-### For Claude Desktop (claude_desktop_config.json)
+```json
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "supabase-mcp"],
+      "env": {
+        "SUPABASE_URL": "your_supabase_project_url",
+        "SUPABASE_ANON_KEY": "your_supabase_anon_key",
+        "SUPABASE_SERVICE_ROLE_KEY": "your_supabase_service_role_key",
+        "MCP_API_KEY": "your_mcp_api_key"
+      }
+    }
+  }
+}
+```
 
-You can also create a `claude_desktop_config.json` file for Claude Desktop with the following configuration:
+### Option 2: If using the cloned repository
 
 ```json
 {
@@ -80,8 +99,6 @@ You can also create a `claude_desktop_config.json` file for Claude Desktop with 
         "SUPABASE_URL": "your_supabase_project_url",
         "SUPABASE_ANON_KEY": "your_supabase_anon_key",
         "SUPABASE_SERVICE_ROLE_KEY": "your_supabase_service_role_key",
-        "MCP_SERVER_PORT": "3000",
-        "MCP_SERVER_HOST": "localhost",
         "MCP_API_KEY": "your_mcp_api_key"
       }
     }
@@ -89,9 +106,22 @@ You can also create a `claude_desktop_config.json` file for Claude Desktop with 
 }
 ```
 
-5. You can now use Claude to perform database operations and invoke Edge Functions
+### Connecting to Claude
 
-Example prompts:
+1. Open Claude Desktop
+2. Go to Settings > MCP
+3. For manual configuration:
+   - Click "Add MCP Server"
+   - Enter the URL: `http://localhost:3000` (or your chosen host/port)
+   - Click "Add"
+4. For automatic configuration:
+   - Click on "Advanced Configuration"
+   - Click on "Select Configuration File"
+   - Browse to and select your `mcp-config.json` file
+   - Click "Save" or "Apply"
+5. You should see a green "active" status once connected
+
+## Example Prompts
 
 - "Query all users from the 'profiles' table where the status is 'active'"
 - "Insert a new product with name 'Widget', price 19.99, and category 'Tools' into the products table"
@@ -123,6 +153,15 @@ Example prompts:
 - All endpoints (except the manifest) require an API key to be provided in the `x-api-key` header
 - The API key should match the `MCP_API_KEY` in your environment variables
 - The server uses the Supabase service role key for database operations, so be cautious about what operations are allowed
+
+## Publishing to npm (for maintainers)
+
+If you want to publish updates to npm:
+
+1. Update the version in package.json
+2. Build the project: `npm run build`
+3. Log in to npm: `npm login`
+4. Publish: `npm publish`
 
 ## License
 
