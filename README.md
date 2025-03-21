@@ -19,7 +19,7 @@ A Model Context Protocol (MCP) server that allows Claude and other LLMs to inter
 
 ### Option 1: Install from npm (recommended)
 
-The package is now published on npm! You can install it globally with:
+You can install it globally with:
 
 ```bash
 npm install -g supabase-mcp
@@ -72,7 +72,7 @@ npm start
 
 ### Option 1: Simple Configuration with npm package (Recommended)
 
-Now that the package is published on npm, you can use a much simpler configuration. Create a `mcp-config.json` file with the following content:
+Now that the package is published on npm, you can use a much simpler configuration. Create a `claude_mcp_config.json` file with the following content:
 
 ```json
 {
@@ -121,7 +121,7 @@ Now that the package is published on npm, you can use a much simpler configurati
 4. For automatic configuration:
    - Click on "Advanced Configuration"
    - Click on "Select Configuration File"
-   - Browse to and select your `mcp-config.json` file
+   - Browse to and select your confige file `claude_mcp_config.json`
    - Click "Save" or "Apply"
 5. You should see a green "active" status once connected
 
