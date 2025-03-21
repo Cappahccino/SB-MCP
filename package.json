@@ -1,6 +1,6 @@
 {
   "name": "supabase-mcp",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "MCP server for Supabase CRUD operations and Edge Functions integration",
   "type": "module",
   "exports": {
@@ -18,13 +18,13 @@
   },
   "bin": {
     "supabase-mcp": "dist/esm/index.js",
-    "supabase-mcp-claude": "dist/esm/claude-transport.js"
+    "supabase-mcp-claude": "dist/esm/claude-entry.js"
   },
   "scripts": {
     "start": "node dist/esm/index.js",
-    "start:claude": "node dist/esm/claude-transport.js",
+    "start:claude": "node dist/esm/claude-entry.js",
     "dev": "tsx watch --clear-screen=false src/index.ts",
-    "dev:claude": "tsx watch --clear-screen=false src/claude-transport.ts",
+    "dev:claude": "tsx watch --clear-screen=false src/claude-entry.ts",
     "build": "npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.prod.json && echo '{\"type\": \"module\"}' > dist/esm/package.json",
     "build:cjs": "tsc -p tsconfig.cjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json",
