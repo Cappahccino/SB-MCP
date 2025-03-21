@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { SupabaseConfig } from './types/supabase';
+import { SupabaseConfig } from './types/supabase.js';
 
 // Load environment variables
 dotenv.config();
