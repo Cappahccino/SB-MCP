@@ -19,9 +19,13 @@ A Model Context Protocol (MCP) server that allows Claude and other LLMs to inter
 
 ### Option 1: Install from npm (recommended)
 
+The package is now published on npm! You can install it globally with:
+
 ```bash
 npm install -g supabase-mcp
 ```
+
+This makes it easy to use with Claude Desktop without specifying absolute paths.
 
 ### Option 2: Clone the repository
 
@@ -66,9 +70,9 @@ npm start
 
 ## Usage with Claude Desktop
 
-### Option 1: Simple Configuration (with npm package)
+### Option 1: Simple Configuration with npm package (Recommended)
 
-Create a `mcp-config.json` file with the following content:
+Now that the package is published on npm, you can use a much simpler configuration. Create a `mcp-config.json` file with the following content:
 
 ```json
 {
@@ -123,6 +127,8 @@ Create a `mcp-config.json` file with the following content:
 
 ## Example Prompts
 
+Once connected, you can use natural language to interact with your Supabase database:
+
 - "Query all users from the 'profiles' table where the status is 'active'"
 - "Insert a new product with name 'Widget', price 19.99, and category 'Tools' into the products table"
 - "Update the 'users' table to set status to 'inactive' where last_login was before 2023-01-01"
@@ -156,7 +162,9 @@ Create a `mcp-config.json` file with the following content:
 
 ## Publishing to npm (for maintainers)
 
-If you want to publish updates to npm:
+The package is already published to npm as `supabase-mcp`.
+
+If you want to publish updates:
 
 1. Update the version in package.json
 2. Build the project: `npm run build`
