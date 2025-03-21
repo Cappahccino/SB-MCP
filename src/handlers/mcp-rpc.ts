@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { mcpService } from '../services/mcp';
+import { mcpService } from '../services/mcp.js';
 
 interface JsonRpcRequest {
   jsonrpc: string;
