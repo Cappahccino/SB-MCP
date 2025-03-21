@@ -11,7 +11,7 @@ dotenv.config();
 try {
   validateConfig();
 } catch (error) {
-  console.error('Configuration error:', error.message);
+  console.error('Configuration error:', error instanceof Error ? error.message : String(error));
   process.exit(1);
 }
 
