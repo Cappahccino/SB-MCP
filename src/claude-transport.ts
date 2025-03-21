@@ -1,9 +1,11 @@
-import { createServer } from './server.js';
-import { validateConfig, mcpConfig, mcpManifest } from './config.js';
+import { validateConfig } from './config.js';
 import { supabaseService } from './services/supabase.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
+
+// IMPORTANT: We use console.error for all logging to avoid interfering with JSON-RPC
+// NEVER use console.log in this file - it will break the Claude communication
 
 // Validate the configuration
 try {
@@ -16,7 +18,7 @@ try {
 // Create the MCP server
 const server = new McpServer({
   name: "Supabase MCP",
-  version: "1.2.0",
+  version: "1.3.0",
   description: "MCP server for Supabase CRUD operations and Edge Functions"
 });
 
@@ -200,19 +202,15 @@ server.tool(
   }
 );
 
-// Start the server with stdio transport
-export const startStdioTransport = () => {
-  const transport = new StdioServerTransport();
-  server.connect(transport)
-    .then(() => {
-      console.error("Supabase MCP server connected and ready"); // Using console.error to send to stderr
-    })
-    .catch((error) => {
-      console.error("Error starting Supabase MCP server:", error);
-      process.exit(1);
-    });
-};
-
-if (require.main === module) {
-  startStdioTransport();
-}
+// Create and connect the stdio transport immediately
+// This is the main entry point for the Claude MCP integration
+const transport = new StdioServerTransport();
+console.error("Supabase MCP server initializing..."); // Using console.error to send to stderr
+server.connect(transport)
+  .then(() => {
+    console.error("Supabase MCP server connected and ready"); // Using console.error to send to stderr
+  })
+  .catch((error) => {
+    console.error("Error starting Supabase MCP server:", error);
+    process.exit(1);
+  });
