@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { supabaseConfig } from '../config';
-import { DatabaseResult, EdgeFunctionResult, FetchTablesResult } from '../types/supabase';
+import { supabaseConfig } from '../config.js';
+import { DatabaseResult, EdgeFunctionResult, FetchTablesResult } from '../types/supabase.js';
 
 class SupabaseService {
   private client: SupabaseClient;
