@@ -1,6 +1,6 @@
 # Supabase MCP Server
 
-A Model Context Protocol (MCP) server that allows Claude and other LLMs to interact with Supabase to perform CRUD operations on Postgres tables and invoke Edge Functions.
+A Model Context Protocol (MCP) server that allows Claude and other LLMs to interact with Supabase to perform CRUD operations on Postgres tables.
 
 ## Features
 
@@ -10,9 +10,6 @@ A Model Context Protocol (MCP) server that allows Claude and other LLMs to inter
   - Update data
   - Delete data
   - List tables
-
-- Edge Functions:
-  - Invoke Edge Functions with custom payloads
 
 ## Prerequisites
 
@@ -183,13 +180,6 @@ This usually means Claude initiated the connection but the server was unable to 
 5. **listTables**
    - Parameters: None
 
-### Edge Functions
-
-1. **invokeEdgeFunction**
-   - Parameters:
-     - `functionName` (string): Name of the Edge Function to invoke
-     - `payload` (object, optional): Optional payload to send to the function
-
 ## Version History
 
 - 1.0.0: Initial release
@@ -200,6 +190,7 @@ This usually means Claude initiated the connection but the server was unable to 
 - 1.2.0: Added separate Claude transport and fixed port conflict issues
 - 1.3.0: Updated for improved compatibility with TypeScript projects
 - 1.4.0: Fixed Claude stdio transport integration based on Supabase community best practices
+- 1.5.0: Removed Edge Function support to improve stability and focus on database operations
 
 ## License
 
