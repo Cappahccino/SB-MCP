@@ -1,5 +1,4 @@
 export * from './database.js';
-export * from './edge-functions.js';
 export * from './mcp-rpc.js';
 
 import { Request, Response, NextFunction } from 'express';
