@@ -66,9 +66,9 @@ npm start
 3. Add a new MCP server with the URL `http://localhost:3000` (or your chosen host/port)
 4. You should see a green active status once connected
 
-### For Claude Desktop (mcp-config.json)
+### For Claude Desktop (claude_desktop_config.json)
 
-You can also create a `mcp-config.json` file for Claude Desktop with the following configuration:
+You can also create a `claude_desktop_config.json` file for Claude Desktop with the following configuration:
 
 ```json
 {
