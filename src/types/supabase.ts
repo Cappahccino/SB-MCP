@@ -6,11 +6,6 @@ export interface SupabaseConfig {
   serviceRoleKey: string;
 }
 
-export interface EdgeFunctionResult {
-  data: any;
-  error: any;
-}
-
 export interface DatabaseResult<T = any> {
   data: T | null;
   error: any;

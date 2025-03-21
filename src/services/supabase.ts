@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { supabaseConfig } from '../config.js';
-import { DatabaseResult, EdgeFunctionResult, FetchTablesResult } from '../types/supabase.js';
+import { DatabaseResult, FetchTablesResult } from '../types/supabase.js';
 
 class SupabaseService {
   private client: SupabaseClient;
@@ -182,24 +182,6 @@ class SupabaseService {
 
       const { data: result, error } = await queryBuilder.select();
       return { data: result as T, error };
-    } catch (error) {
-      return { data: null, error };
-    }
-  }
-
-  /**
-   * Invoke an Edge Function
-   */
-  async invokeEdgeFunction(
-    functionName: string,
-    payload: Record<string, any> = {}
-  ): Promise<EdgeFunctionResult> {
-    try {
-      const { data, error } = await this.client.functions.invoke(functionName, {
-        body: payload
-      });
-      
-      return { data, error };
     } catch (error) {
       return { data: null, error };
     }

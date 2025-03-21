@@ -35,15 +35,15 @@ export function validateConfig() {
 // MCP manifest configuration (used in the /.well-known/mcp-manifest route)
 export const mcpManifest = {
   schema_version: "1.0",
-  human_description: "Supabase MCP server for performing CRUD operations on Postgres tables and interacting with Edge Functions",
+  human_description: "Supabase MCP server for performing CRUD operations on Postgres tables",
   models: ["claude-3-opus-20240229", "claude-3-sonnet-20240229", "claude-3-haiku-20240307"],
-  display_name: "Supabase Database & Edge Functions",
+  display_name: "Supabase Database",
   contact_email: "your-email@example.com",
   logo_url: null,
   capabilities: [
     {
       name: "supabase",
-      description: "Perform CRUD operations on Supabase Postgres tables and invoke Edge Functions",
+      description: "Perform CRUD operations on Supabase Postgres tables",
       authentication: {
         type: "api_key",
         instructions: "Set the MCP_API_KEY environment variable in the .env file"
@@ -100,18 +100,6 @@ export const mcpManifest = {
               query: { type: "object", description: "Filter conditions for deletion" }
             },
             required: ["table", "query"]
-          }
-        },
-        {
-          name: "invokeEdgeFunction",
-          description: "Invoke a Supabase Edge Function",
-          parameters: {
-            type: "object",
-            properties: {
-              functionName: { type: "string", description: "Name of the Edge Function to invoke" },
-              payload: { type: "object", description: "Optional payload to send to the function" }
-            },
-            required: ["functionName"]
           }
         },
         {

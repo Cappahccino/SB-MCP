@@ -7,8 +7,6 @@ import {
   handleHealthCheck,
   handleDatabaseOperation,
   handleListTables,
-  handleEdgeFunction,
-  handleListEdgeFunctions,
   handleJsonRpc
 } from './handlers/index.js';
 
@@ -39,10 +37,6 @@ export function createServer() {
   // Database operations
   app.post('/database/:operation', handleDatabaseOperation);
   app.get('/database/tables', handleListTables);
-
-  // Edge Functions
-  app.post('/edge-functions/:functionName', handleEdgeFunction);
-  app.get('/edge-functions', handleListEdgeFunctions);
 
   // 404 handler
   app.use((req: Request, res: Response) => {

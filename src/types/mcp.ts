@@ -66,10 +66,3 @@ export interface DatabaseParams {
   query?: Record<string, any>;
   select?: string;
 }
-
-// Edge Function types
-
-export interface EdgeFunctionParams {
-  functionName: string;
-  payload?: Record<string, any>;
-}

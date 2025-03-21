@@ -1,5 +1,5 @@
 import { supabaseService } from './supabase.js';
-import { MCPToolCallRequest, MCPToolCallResponse, DatabaseParams, EdgeFunctionParams } from '../types/mcp.js';
+import { MCPToolCallRequest, MCPToolCallResponse, DatabaseParams } from '../types/mcp.js';
 
 class MCPService {
   /**
@@ -21,9 +21,6 @@ class MCPService {
         
         case 'deleteData':
           return await this.handleDeleteData(parameters as DatabaseParams);
-        
-        case 'invokeEdgeFunction':
-          return await this.handleInvokeEdgeFunction(parameters as EdgeFunctionParams);
         
         case 'listTables':
           return await this.handleListTables();
@@ -134,27 +131,6 @@ class MCPService {
     if (result.error) {
       return {
         error: `Database delete error: ${result.error.message || JSON.stringify(result.error)}`
-      };
-    }
-
-    return { content: result.data };
-  }
-
-  /**
-   * Handle Edge Function invocation
-   */
-  private async handleInvokeEdgeFunction(params: EdgeFunctionParams): Promise<MCPToolCallResponse> {
-    const { functionName, payload = {} } = params;
-    
-    if (!functionName) {
-      return { error: 'Function name is required' };
-    }
-
-    const result = await supabaseService.invokeEdgeFunction(functionName, payload);
-    
-    if (result.error) {
-      return {
-        error: `Edge Function error: ${result.error.message || JSON.stringify(result.error)}`
       };
     }
 
