@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { createServer } from './server';
 import { mcpConfig, validateConfig } from './config';
 
