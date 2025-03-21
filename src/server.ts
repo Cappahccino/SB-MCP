@@ -8,8 +8,7 @@ import {
   handleDatabaseOperation,
   handleListTables,
   handleEdgeFunction,
-  handleListEdgeFunctions,
-  handleToolCall
+  handleListEdgeFunctions
 } from './handlers';
 
 export function createServer() {
@@ -18,7 +17,14 @@ export function createServer() {
   // Middleware
   app.use(cors());
   app.use(bodyParser.json());
-  app.use(validateApiKey);
+  
+  // Skip API key validation for manifest endpoint
+  app.use((req, res, next) => {
+    if (req.path === '/.well-known/mcp-manifest') {
+      return next();
+    }
+    validateApiKey(req, res, next);
+  });
 
   // MCP required endpoints
   app.get('/.well-known/mcp-manifest', handleManifest);
@@ -33,9 +39,6 @@ export function createServer() {
   // Edge Functions
   app.post('/edge-functions/:functionName', handleEdgeFunction);
   app.get('/edge-functions', handleListEdgeFunctions);
-
-  // Generic tool call handler (as a fallback)
-  app.use('*', handleToolCall);
 
   // 404 handler
   app.use((req, res) => {
