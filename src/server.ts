@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { 
@@ -20,7 +20,7 @@ export function createServer() {
   app.use(bodyParser.json());
   
   // Skip API key validation for manifest endpoint
-  app.use((req, res, next) => {
+  app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.path === '/.well-known/mcp-manifest' || req.path === '/mcp') {
       return next();
     }
@@ -45,12 +45,12 @@ export function createServer() {
   app.get('/edge-functions', handleListEdgeFunctions);
 
   // 404 handler
-  app.use((req, res) => {
+  app.use((req: Request, res: Response) => {
     res.status(404).json({ error: 'Not found' });
   });
 
   // Error handler
-  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error('Server error:', err);
     res.status(500).json({ error: `Server error: ${err.message}` });
   });
