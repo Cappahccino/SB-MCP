@@ -2,6 +2,7 @@
 
 import { createServer } from './server';
 import { mcpConfig, validateConfig } from './config';
+import getPort from 'get-port';
 
 // Validate required configuration
 try {
@@ -12,9 +13,33 @@ try {
 }
 
 const app = createServer();
-const { port, host } = mcpConfig;
+const { port: configuredPort, host } = mcpConfig;
 
-app.listen(port, () => {
-  console.log(`Supabase MCP server listening at http://${host}:${port}`);
-  console.log(`MCP manifest available at http://${host}:${port}/.well-known/mcp-manifest`);
-});
+// Auto port selection function
+const startServer = async () => {
+  try {
+    // Try to use the configured port first, or find an available port
+    const availablePort = await getPort({
+      port: [configuredPort, ...Array.from({ length: 20 }, (_, i) => configuredPort + i + 1)]
+    });
+
+    app.listen(availablePort, () => {
+      // If we're using a different port than configured, show a message
+      if (availablePort !== configuredPort) {
+        console.log(`Port ${configuredPort} was in use, using port ${availablePort} instead.`);
+      }
+      
+      console.log(`Supabase MCP server listening at http://${host}:${availablePort}`);
+      console.log(`MCP manifest available at http://${host}:${availablePort}/.well-known/mcp-manifest`);
+    }).on('error', (err) => {
+      console.error('Error starting server:', err);
+      process.exit(1);
+    });
+  } catch (error) {
+    console.error('Failed to find an available port:', error);
+    process.exit(1);
+  }
+};
+
+// Start the server with auto port selection
+startServer();
