@@ -24,13 +24,14 @@ const startServer = async () => {
     });
 
     app.listen(availablePort, () => {
-      // If we're using a different port than configured, show a message
+      // If we're using a different port than configured, show a message - using stderr for logs
       if (availablePort !== configuredPort) {
-        console.log(`Port ${configuredPort} was in use, using port ${availablePort} instead.`);
+        console.error(`Port ${configuredPort} was in use, using port ${availablePort} instead.`);
       }
       
-      console.log(`Supabase MCP server listening at http://${host}:${availablePort}`);
-      console.log(`MCP manifest available at http://${host}:${availablePort}/.well-known/mcp-manifest`);
+      // Use stderr for logs to avoid interfering with MCP protocol
+      console.error(`Supabase MCP server listening at http://${host}:${availablePort}`);
+      console.error(`MCP manifest available at http://${host}:${availablePort}/.well-known/mcp-manifest`);
     }).on('error', (err) => {
       console.error('Error starting server:', err);
       process.exit(1);
